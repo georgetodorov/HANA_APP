@@ -1,3 +1,31 @@
 ID: HANA_APP
 _schema-version: '2.1'
 version: 0.0.1
+
+modules:
+ - name: web
+   type: html5
+   path: web
+   parameters:
+      disk-quota: 512M
+      memory: 256M
+   build-parameters:
+      builder: grunt
+   requires:
+    - name: uaa_HANA_APP
+    - name: dest_HANA_APP
+
+resources:
+ - name: uaa_HANA_APP
+   parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+   type: org.cloudfoundry.managed-service
+
+ - name: dest_HANA_APP
+   parameters:
+      service-plan: lite
+      service: destination
+   type: org.cloudfoundry.managed-service
+
