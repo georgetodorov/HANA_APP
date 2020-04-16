@@ -13,13 +13,25 @@ modules:
     requires:
       - name: uaa_HANA_APP
       - name: dest_HANA_APP
-
+      - name: core_xsjs_api
   - name: db
     type: hdb
     path: db
     requires:
-     - name: hdi_db
-
+      - name: hdi_db
+  - name: core_xsjs
+    type: nodejs
+    path: core_xsjs
+    provides:
+      - name: core_xsjs_api
+        properties:
+          url: '${default-url}'
+    properties:
+      url: '${default-url}'
+    requires:
+      - name: uaa_HANA_APP
+      - name: hdi_db
+      - name: db
 resources:
   - name: uaa_HANA_APP
     parameters:
@@ -32,12 +44,10 @@ resources:
       service-plan: lite
       service: destination
     type: org.cloudfoundry.managed-service
-
   - name: hdi_db
     parameters:
-       config:
-          schema: SCHEMA_DB
+      config:
+        schema: SCHEMA_DB
     properties:
-       hdi-container-name: ${service-name}
+      hdi-container-name: '${service-name}'
     type: com.sap.xs.hdi-container
-
